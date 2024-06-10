@@ -150,7 +150,7 @@ def enrich_with_cited_references(apikey, records):
     for i, record in enumerate(records):
         cited_ref_data = retrieve_cited_refs_via_api(apikey, record['UT'])
         record['CR'] = '; '.join(fetch_cited_refs_metadata(cited_ref) for cited_ref in cited_ref_data['Data'])
-        print(f'Cited references for record {i} of {len(records)} retrieved.')
+        print(f'Cited references for the record {i+1} of {len(records)} retrieved.')
     return records
 
 
@@ -160,9 +160,17 @@ def fetch_cited_refs_metadata(cited_ref):
     :param cited_ref: dict.
     :return: str.
     """
-    fields = ('CitedAuthor', 'Year', 'CitedWork', 'Volume', 'Page', 'DOI')
     cited_ref_list = []
-    for field in fields:
-        if field in cited_ref.keys():
-            cited_ref_list.append(cited_ref[field])
+    if 'CitedAuthor' in cited_ref:
+        cited_ref_list.append(cited_ref['CitedAuthor'].replace(',', ''))
+    if 'Year' in cited_ref:
+        cited_ref_list.append(cited_ref['Year'])
+    if 'CitedWork'in cited_ref:
+        cited_ref_list.append(cited_ref['CitedWork'])
+    if 'Volume' in cited_ref:
+        cited_ref_list.append(f'V{cited_ref["Volume"]}')
+    if 'Page' in cited_ref:
+        cited_ref_list.append(f'P{cited_ref["Page"]}')
+    if 'DOI' in cited_ref:
+        cited_ref_list.append(f'DOI {cited_ref["DOI"]}')
     return ', '.join(cited_ref_list)
