@@ -1,3 +1,10 @@
+"""
+Fetch necessary metadata fields from Web of Science records.
+"""
+
+from api_operations import retrieve_cited_refs_via_api
+
+
 def fetch_author_names(names_json):
     """Retrieve the names of the authors.
 
@@ -130,3 +137,32 @@ def fetch_expanded_metadata(record):
     tc = fetch_times_cited(record['dynamic_data']['citation_related']['tc_list']['silo_tc'])
     return {'UT': ut, 'PY': py, 'AU': authors, 'SO': source_title, 'C1': c1,
             'TI': doc_title, 'DE': keywords, 'ID': keywords_plus, 'AB': abstract, 'TC': tc}
+
+
+def enrich_with_cited_references(apikey, records):
+    """Adds cited references metadata to each of the records.
+
+    :param apikey: str.
+    :param records: list.
+    :return: list.
+    """
+    print(f'Now retrieving cited references for each of the {len(records)} records.')
+    for i, record in enumerate(records):
+        cited_ref_data = retrieve_cited_refs_via_api(apikey, record['UT'])
+        record['CR'] = '; '.join(fetch_cited_refs_metadata(cited_ref) for cited_ref in cited_ref_data['Data'])
+        print(f'Cited references for record {i} of {len(records)} retrieved.')
+    return records
+
+
+def fetch_cited_refs_metadata(cited_ref):
+    """Retrieves cited reference metadata that's compatible with VOSviewer.
+
+    :param cited_ref: dict.
+    :return: str.
+    """
+    fields = ('CitedAuthor', 'Year', 'CitedWork', 'Volume', 'Page', 'DOI')
+    cited_ref_list = []
+    for field in fields:
+        if field in cited_ref.keys():
+            cited_ref_list.append(cited_ref[field])
+    return ', '.join(cited_ref_list)

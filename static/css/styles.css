@@ -6,7 +6,7 @@ html {
     font-size: 16 px;
 }
 
-bodY {
+body {
     padding 0;
     margins 0;
     font-family: "Source Sans Pro", Calibri, Arial, Helvetica, sans-serif;
@@ -21,7 +21,7 @@ h1 {
 }
 
 h2 {
-    font: 600 20px / "Source Sans Pro", sans-serif;
+    font: 600 20px / 1.3 "Source Sans Pro", sans-serif;
     color: #616161;
     text-align: left;
     margin-block-start: 0;
@@ -42,7 +42,9 @@ h3 {
 textarea {
     font: inherit;
     outline: none;
-    padding: 0.5rem 0.75rem;
+    padding: 10px 0 10px 10px;
+    margin-top: .625rem;
+    margin-bottom: .625rem;
     width: 100%;
     border-style: solid;
     border-color: #BABCBE;
@@ -54,7 +56,6 @@ textarea {
 p {
     font: 400 14px / 1.3 "Source Sans Pro", sans-serif;
     text-align: left;
-    margin-block-start: 0;
 }
 
 textarea:focus {
@@ -93,4 +94,78 @@ button[value="validate"]:hover {
 
 button[value="run"] {
     padding: .5rem 1.75rem;
+}
+
+.switch {
+    display: flex;
+    flex-direction: row;
+    margin-top: .625rem;
+    margin-bottom: .625rem;
+}
+
+.switch__toggle {
+    position: relative;
+    left: 15px;
+    top: 2px;
+    width: 36px;
+    height: 14px;
+}
+
+.switch__toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 34px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000061;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    border-radius: 50%;
+    top: -3px;
+    left: -2px;
+    content: "";
+    height: 20px;
+    width: 20px;
+    background-color: #F2F2F2;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: #5D33BF8a;
+}
+
+input:checked + .before {
+    background-color: #5D33BF;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    background-color: #5D33BF;
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+    -webkit-transform: background-color 1000ms linear;
+    -ms-transform: background-color 1000ms linear;
+    transform: background-color 1000ms linear;
+}
+
+.switch__label {
+    padding: 0rem 1.75rem;
+    cursor: pointer;
 }
